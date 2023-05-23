@@ -12,18 +12,20 @@ const requireAuth = async(to,from,next) => {
     userStore.loadingSession = true;
     const user = await userStore.currentUser()
     if(user){
-        next()
+        next();
+        
     } else {
-        next('/login')
+        next('/login');
+        
     }
     userStore.loadingSession = false;
 }
 
 const routes = [
-    {path: '/', component: Home, beforeEnter: requireAuth},
-    {path: '/editar/:id', component: Editar, beforeEnter: requireAuth},
-    {path: '/login', component: Login},
-    {path: '/register', component: Register},
+    {path: '/', component: Home, beforeEnter: requireAuth, name:'home'},
+    {path: '/editar/:id', component: Editar, beforeEnter: requireAuth, name:'editar'},
+    {path: '/login', component: Login, name:'login'},
+    {path: '/register', component: Register,name:'register'},
 ]
 
 const router = createRouter({
