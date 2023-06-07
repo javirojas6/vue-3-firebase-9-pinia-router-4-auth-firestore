@@ -90,20 +90,20 @@ const beforeUpload = (file) => {
 }
 
 const handleChange = (info) => {
-    if (info.file.status !== "uploading") {
-        const isJpgOrPng = info.file.type === 'image/jpeg' || info.file.type === 'image/png';
-        if (!isJpgOrPng) {
-            message.error('You can only upload JPG file!');
-            handleRemove(info.file)
-            return
-        }
-        const isLt2M = info.file.size / 1024 / 1024 < 2;
-        if (!isLt2M) {
-            message.error('Image must smaller than 2MB!');
-            handleRemove(info.file)
-            return
-        }
-    }
+    // if (info.file.status !== "uploading") {
+    //     const isJpgOrPng = info.file.type === 'image/jpeg' || info.file.type === 'image/png';
+    //     if (!isJpgOrPng) {
+    //         message.error('You can only upload JPG file!');
+    //         handleRemove(info.file)
+    //         return
+    //     }
+    //     const isLt2M = info.file.size / 1024 / 1024 < 2;
+    //     if (!isLt2M) {
+    //         message.error('Image must smaller than 2MB!');
+    //         handleRemove(info.file)
+    //         return
+    //     }
+    // }
 }
 
 const handleRemove = file => {
@@ -114,15 +114,9 @@ const handleRemove = file => {
 };
 
 const onFinish = async() => {
-    const error =  await userStore.updateUser(userStore.userData.displayName)
+    const error =  await userStore.updateUser(userStore.userData.displayName, fileList.value[0])
 
-    if(fileList.value[0]) {
-        const error = await userStore.updateImg(fileList.value[0])
-        if (error)
-            return message.success('Problemas al subir tu imagen.')
-        else 
-            return message.success('Se actualizó tu')
-    }
+    
     // fileList.value.forEach(file => {
     //     console.log(file)
     // });

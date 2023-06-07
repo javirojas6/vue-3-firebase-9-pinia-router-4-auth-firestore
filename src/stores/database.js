@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore/lite'
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore/lite'
 import { db } from '../firebaseConfig';
 import { auth } from '../firebaseConfig';
 import { nanoid } from 'nanoid';
@@ -12,6 +12,23 @@ export const useDatabaseStore = defineStore('database', {
         loading: false
       }),
       actions: {
+        async getURL(id){
+            try {
+                const docRef = doc(db,"urls",id);
+                const docSpan = await getDoc(docRef);
+                if (!docSpan.exists())
+                {
+                    return false
+                }
+                
+                return  docSpan.data().name
+            } catch (error) {
+                console.log(error.message)
+                return false
+            } finally {
+                 
+            }
+        },
         async getUrls(){
             // if (this.documents.length !== 0)
             // {
@@ -47,11 +64,13 @@ export const useDatabaseStore = defineStore('database', {
                     short: nanoid(6),
                     user: auth.currentUser.uid
                 }
-                const docRef = await addDoc(collection(db,"urls"), objetoDoc);
-                console.log(docRef)
+                //const docRef = await addDoc(collection(db,"urls"), objetoDoc);
+                await setDoc(doc(db,"urls",objetoDoc.short), objetoDoc);
+                //console.log(docRef)
                 this.documents.push({
                     ...objetoDoc,
-                    id: docRef.id
+                    id:objetoDoc.short
+                    //id: docRef.id
                 });
             } catch (error) {
                 console.log(error.code)

@@ -37,6 +37,8 @@
                     </a-popconfirm>
                     
                     <a-button type="primary" @click="router.push(`editar/${item.id}`)">Editar</a-button>
+
+                    <a-button type="primary" @click="copiarPortapapeles(item.id)">Copiar</a-button>
                 </a-space>
             </template>
             <p>{{ item.name }}</p>
@@ -68,6 +70,31 @@ const confirm = async(id) => {
 
 const cancel = () => {
     message.error('no se eliminó')
+}
+
+const copiarPortapapeles = async(id) => {
+    console.log(id)
+    if (!navigator.clipboard)
+        return message.error('No se pudo copiar al portapapeles')
+    
+    const path = `${window.location.origin}/${id}`;
+    console.log(path)
+
+    const err = await navigator.clipboard.writeText(path)
+    if (err)
+        message.error('No se pudo copiar al portapapeles')
+    else
+        message.success('se copió con éxito')
+
+    //sin await
+    // navigator.clipboard
+    // .writeText(path)
+    // .then(() => {
+    //     message.success('se copió con éxito')
+    // })
+    // .catch((err) => {
+    //     message.error('No se pudo copiar al portapapeles')
+    // })
 }
 
 // const url = ref('');
